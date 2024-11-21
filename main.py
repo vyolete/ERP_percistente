@@ -1,7 +1,14 @@
 import streamlit as st
 import sqlite3
 import pandas as pd
+import sys
+import os
+
+# Agrega el directorio raíz al path
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
 from utils.db_setup import create_tables
+
 
 # Asegurarse de que las tablas se creen antes de usarlas
 create_tables()
