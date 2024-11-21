@@ -10,9 +10,6 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from utils.db_setup import create_tables
 
 
-# Asegurarse de que las tablas se creen antes de usarlas
-create_tables()
-
 # Función para conectarse a la base de datos
 def get_connection():
     return sqlite3.connect('erp_system.db')
@@ -26,6 +23,11 @@ clientes = cursor.fetchall()
 print(clientes)
 
 conn.close()
+
+
+# Asegurarse de que las tablas se creen antes de usarlas
+create_tables()
+
 # Menú de navegación
 st.sidebar.title("Sistema ERP")
 menu = st.sidebar.selectbox("Seleccione una opción", ["Gestión de Clientes", "Gestión de Productos", "Inventario", "Facturación", "Análisis de Ventas", "Reportes"])
