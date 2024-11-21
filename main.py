@@ -2,10 +2,22 @@ import streamlit as st
 import sqlite3
 import pandas as pd
 
+# Asegurarse de que las tablas se creen antes de usarlas
+create_tables()
+
 # Función para conectarse a la base de datos
 def get_connection():
     return sqlite3.connect('erp_system.db')
+    
+# Ejemplo: Insertar y consultar clientes
+cursor.execute("INSERT INTO clientes (nombre, correo, telefono, direccion) VALUES ('Juan', 'juan@example.com', '123456789', 'Calle 123')")
+conn.commit()
 
+cursor.execute("SELECT * FROM clientes")
+clientes = cursor.fetchall()
+print(clientes)
+
+conn.close()
 # Menú de navegación
 st.sidebar.title("Sistema ERP")
 menu = st.sidebar.selectbox("Seleccione una opción", ["Gestión de Clientes", "Gestión de Productos", "Inventario", "Facturación", "Análisis de Ventas", "Reportes"])
