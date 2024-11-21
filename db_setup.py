@@ -1,10 +1,13 @@
 import sqlite3
+import os
 
 def create_tables():
-    conn = sqlite3.connect('erp_system.db')
+    # Ruta absoluta al archivo de base de datos
+    db_path = os.path.join(os.path.dirname(__file__), "../data/erp_system.db")
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
-    # Crear tablas
+    # Crear las tablas
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS clientes (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
