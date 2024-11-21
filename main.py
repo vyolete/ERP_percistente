@@ -12,18 +12,59 @@ from utils.db_setup import create_tables
 
 # Función para conectarse a la base de datos
 def get_connection():
-    return sqlite3.connect('erp_system.db')
-    
-# Ejemplo: Insertar y consultar clientes
-cursor.execute("INSERT INTO clientes (nombre, correo, telefono, direccion) VALUES ('Juan', 'juan@example.com', '123456789', 'Calle 123')")
-conn.commit()
+    # Verifica si el archivo de base de datos existe
+    try:
+        return sqlite3.connect('data/erp_system.db')  # Usa la ruta completa si está en un subdirectorio
+    except sqlite3.Error as e:
+        st.error(f"Error al conectar a la base de datos: {e}")
+        return None
 
-cursor.execute("SELECT * FROM clientes")
-clientes = cursor.fetchall()
-print(clientes)
+# Asegúrate de que las tablas se crean antes de usarlas
+def create_tables():
+    conn = get_connection()
+    if conn is None:
+        st.error("No se pudo conectar a la base de datos.")
+        return
+    cursor = conn.cursor()
+    try:
+        # Crea la tabla si no existe
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS clientes (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                nombre TEXT NOT NULL,
+                correo TEXT NOT NULL,
+                telefono TEXT NOT NULL,
+                direccion TEXT NOT NULL
+            )
+        ''')
+        conn.commit()
+    except sqlite3.Error as e:
+        st.error(f"Error al crear la tabla: {e}")
+    finally:
+        conn.close()
 
-conn.close()
+# Llamada a la función para asegurarse de que la tabla existe
+create_tables()
 
+# Inserta y consulta datos
+try:
+    conn = get_connection()
+    if conn is not None:
+        cursor = conn.cursor()
+        cursor.execute("""
+            INSERT INTO clientes (nombre, correo, telefono, direccion) 
+            VALUES ('Juan', 'juan@example.com', '123456789', 'Calle 123')
+        """)
+        conn.commit()
+
+        cursor.execute("SELECT * FROM clientes")
+        clientes = cursor.fetchall()
+        st.write("Clientes en la base de datos:", clientes)
+    else:
+        st.error("No se pudo insertar ni consultar datos porque la conexión falló.")
+finally:
+    if conn:
+        conn.close()
 
 # Asegurarse de que las tablas se creen antes de usarlas
 create_tables()
