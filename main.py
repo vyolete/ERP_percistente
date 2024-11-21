@@ -1,6 +1,8 @@
 import streamlit as st
 import sqlite3
 import pandas as pd
+from erp_percistente.database import create_tables
+
 
 # Asegurarse de que las tablas se creen antes de usarlas
 create_tables()
